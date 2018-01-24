@@ -133,6 +133,9 @@ task main()
 	//liftPID(630);
 	//wait1Msec(2000);
 	//liftPID(-40);
-	moveStraight(700);
-
+	while(1){
+		moveStraight(700);
+		sleep(500);
+		moveStraight(-700);
+	}
 }
