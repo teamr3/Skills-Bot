@@ -87,69 +87,78 @@ void moveStraight(int i,long d,int s){
 	}
 }
 
-
-
-void doLift(int d, int ticks, int power){
-	clearTimer(T2);
+void liftX(int ticks){
+	clearTimer(T1);
 	nMotorEncoder[lift]=0;
-	setMotorTarget(lift, d*ticks, power, false);
-		while((!getMotorTargetCompleted(lift))&time1[T2]<3000)
+	if(ticks < 0)
 	{
-		sleep(10);
+		while(nMotorEncoder[lift]>ticks && time1[T1] < 5000)
+		{
+			motor[lift] = 70;
+		}
 	}
+	else{
+		while(nMotorEncoder[lift]<ticks && time1[T1]< 5000)
+		{
+			motor[lift]=-127;
+		}
+	}
+	motor[lift]=0;
 }
 
 
 
 task main()
 {
+	//initializeGyro();
+	liftX(-530);
 	moveStraight(1,1.5,70);
-	doLift(up);
+	liftX(530);
 	moveStraight(-1,1,70);
-	turn(-180);
-	moveStraight(1,.5,70);
-	doLift(down);
-	moveStraight(-1,.5,70);
-	turn(45);
-	moveStraight(1,1,70);
-	turn(90);
-	doLift(down);
-	moveStraight(1,1.5,70);
-	doLift(up);
-	turn(-160);
-	moveStraight(1,3,70);
-	doLift(down);
-	moveStraight(-1,1,70);
-	turn(150);
-	moveStraight(1,1.25,70);
-	doLift(up);
-	turn(-150);
-	moveStraight(1,1,70);
-	doLift(down);
-	moveStraight(-1,.5,70);
-	turn(180);
-	moveStraight(1,4,70);
-	doLift(up);
-	turn(10);
-	moveStraight(1,3,70);
-	doLift(down);
-	moveStraight(-1,1,70);
-	turn(160);
-	moveStraight(1,1,70);
-	doLift(up);
-	turn(-160);
-	moveStraight(1,1.5,70);
-	doLift(down);
-	moveStraight(-1,1,70);
-	turn(-45);
-	moveStraight(1,3,70);
-	turn(-90);
-	moveStraight(1,1.5,70);
-	doLift(up);
-	moveStraight(-1,1,70);
-	turn(-180);
-	moveStraight(1,.5,70);
-	doLift(down);
-	moveStraight(-1,2,70);
-	doLift(up);
+	//rotate(-180);
+	//moveStraight(1,.5,70);
+	//liftX(-530);
+	//moveStraight(-1,.5,70);
+	//rotate(45);
+	//moveStraight(1,1,70);
+	//rotate(90);
+	//liftX(-530);
+	//moveStraight(1,1.5,70);
+	//liftX(530);
+	//rotate(-160);
+	//moveStraight(1,3,70);
+	//liftX(-530);
+	//moveStraight(-1,1,70);
+	//rotate(150);
+	//moveStraight(1,1.25,70);
+	//liftX(530);
+	//rotate(-150);
+	//moveStraight(1,1,70);
+	//liftX(-530);
+	//moveStraight(-1,.5,70);
+	//rotate(180);
+	//moveStraight(1,4,70);
+	//liftX(530);
+	//rotate(10);
+	//moveStraight(1,3,70);
+	//liftX(-530);
+	//moveStraight(-1,1,70);
+	//rotate(160);
+	//moveStraight(1,1,70);
+	//liftX(530);
+	//rotate(-160);
+	//moveStraight(1,1.5,70);
+	//liftX(-530);
+	//moveStraight(-1,1,70);
+	//rotate(-45);
+	//moveStraight(1,3,70);
+	//rotate(-90);
+	//moveStraight(1,1.5,70);
+	//liftX(530);
+	//moveStraight(-1,1,70);
+	//rotate(-180);
+	//moveStraight(1,.5,70);
+	//liftX(-530);
+	//moveStraight(-1,2,70);
+	//liftX(530);
 }
