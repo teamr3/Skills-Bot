@@ -100,7 +100,7 @@ void liftX(int ticks){
 	else{
 		while(nMotorEncoder[lift]<ticks && time1[T1]< 5000)
 		{
-			motor[lift]=-70;
+			motor[lift]=-127;
 		}
 	}
 	motor[lift]=0;
