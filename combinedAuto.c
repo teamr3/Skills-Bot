@@ -15,10 +15,6 @@ void initializeGyro(){
 	SensorType[gyro]=sensorGyro;
 	wait1Msec(1000);
 }
-
-
-
-
 void rotate(int c, int angle){
 	float targetAngle=c*angle*-10;
 	float rotateError;
@@ -65,8 +61,6 @@ void rotate(int c, int angle){
 
 }
 
-
-
 // PID controlled movement
 // i: controls direction, set to 1 for forward and -1 for negative
 // d: distance in # of tiles
@@ -89,16 +83,15 @@ void moveStraight(int i,long d,int s){
 
 void liftX(int ticks){
 	clearTimer(T1);
-	nMotorEncoder[lift]=0;
 	if(ticks < 0)
 	{
-		while(nMotorEncoder[lift]>ticks && time1[T1] < 5000)
+		while(nMotorEncoder[lift]>ticks&&time1[T1]<2500)
 		{
 			motor[lift] = 127;
 		}
 	}
 	else{
-		while(nMotorEncoder[lift]<ticks && time1[T1]< 5000)
+		while(nMotorEncoder[lift]<ticks&&time1[T1]<2500)
 		{
 			motor[lift]=-127;
 		}
@@ -110,7 +103,7 @@ void liftX(int ticks){
 
 task main()
 {
-	initalizeGyro();
+	initializeGyro();
 	liftX(-530);
 	moveStraight(1,2,70);
 	liftX(530);
