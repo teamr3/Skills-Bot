@@ -64,6 +64,7 @@ void rotate(int c, int angle){
 	}
 	motor[leftD]=0;
 	motor[rightD]=0;
+	wait1Msec(10);
 }
 
 
@@ -72,7 +73,7 @@ void rotate(int c, int angle){
 // i: controls direction, set to 1 for forward and -1 for negative
 // d: distance in # of tiles
 // s: speed of motor from -127 to 127
-void moveStraight(int i,long d,int s){
+void moveStraight(int i,float d,int s){
 	clearTimer(T1);
 	nMotorEncoder(leftD) = 0;
 	nMotorEncoder(rightD) = 0;
@@ -112,20 +113,25 @@ void liftX(int ticks){
 task main()
 {
 	initializeGyro();
-	liftX(-530);
-	moveStraight(1,2,70);
-	liftX(530); //Pick up 1st goal
+	//liftX(-530);
+	//moveStraight(1,2,70);
+	//liftX(530); //Pick up 1st goal
+	//moveStraight(-1,1,70);
+	//rotate(-1,180);
+	//moveStraight(1,1,70);
+	//liftX(-530); //Score in 10pt
 	moveStraight(-1,1,70);
-	rotate(-1,180);
-	moveStraight(1,1.9,70);
-	liftX(-530); //Score in 10pt
-	moveStraight(-1,1.4,70);
 	rotate(1,72);
-	wait1Msec(10);
 	moveStraight(1,1,70);
 	liftX(530); //Pick up 2nd goal
-	rotate(-1,95);
+	rotate(-1,90);
 	moveStraight(1,3,127);
-	liftX(-530); //Score in 20pt
-	moveStraight(-1,0.9,100);
+	//liftX(-530); //Score in 20pt
+	//moveStraight(-1,1,70);
+	//rotate(1,140);
+	//moveStraight(1,1,70);
+	//liftX(530);
+	//rotate(-1,130);
+	//moveStraight(1,2,70);
+	//liftX(-530);
 }
