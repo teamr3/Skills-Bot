@@ -62,7 +62,8 @@ void rotate(int c, int angle){
 		motor[leftD]=-power;
 		motor[rightD]=power;
 	}
-
+	motor[leftD]=0;
+	motor[rightD]=0;
 }
 
 
@@ -75,6 +76,7 @@ void moveStraight(int i,long d,int s){
 	clearTimer(T1);
 	nMotorEncoder(leftD) = 0;
 	nMotorEncoder(rightD) = 0;
+	wait1Msec(50);
 	short dist = -700*d*i;
 	//remember to change code based on wiring
 	setMotorTarget(leftD,dist,s,false);
@@ -96,11 +98,10 @@ void liftX(int ticks){
 		{
 			motor[lift] = 127;
 		}
-	}
-	else{
+	}else{
 		while(nMotorEncoder[lift]<ticks && time1[T1]< 5000)
 		{
-			motor[lift]=-127;
+			motor[lift]=-90;
 		}
 	}
 	motor[lift]=0;
@@ -110,55 +111,21 @@ void liftX(int ticks){
 
 task main()
 {
-	initalizeGyro();
+	initializeGyro();
 	liftX(-530);
 	moveStraight(1,2,70);
-	liftX(530);
+	liftX(530); //Pick up 1st goal
 	moveStraight(-1,1,70);
-	rotate(-1,90);
-	//moveStraight(1,.5,70);
-	//liftX(-530);
-	//moveStraight(-1,.5,70);
-	//rotate(1,45);
-	//moveStraight(1,1,70);
-	//rotate(1,90);
-	//liftX(-530);
-	//moveStraight(1,1.5,70);
-	//liftX(530);
-	//rotate(-1,160);
-	//moveStraight(1,3,70);
-	//liftX(-530);
-	//moveStraight(-1,1,70);
-	//rotate(1,150);
-	//moveStraight(1,1.25,70);
-	//liftX(530);
-	//rotate(-1,150);
-	//moveStraight(1,1,70);
-	//liftX(-530);
-	//moveStraight(-1,.5,70);
-	//rotate(1,180);
-	//moveStraight(1,4,70);
-	//liftX(530);
-	//rotate(1,10);
-	//moveStraight(1,3,70);
-	//liftX(-530);
-	//moveStraight(-1,1,70);
-	//rotate(1,160);
-	//moveStraight(1,1,70);
-	//liftX(530);
-	//rotate(-1,160);
-	//moveStraight(1,1.5,70);
-	//liftX(-530);
-	//moveStraight(-1,1,70);
-	//rotate(-1,45);
-	//moveStraight(1,3,70);
-	//rotate(-1,90);
-	//moveStraight(1,1.5,70);
-	//liftX(530);
-	//moveStraight(-1,1,70);
-	//rotate(-1,180);
-	//moveStraight(1,.5,70);
-	//liftX(-530);
-	//moveStraight(-1,2,70);
-	//liftX(530);
+	rotate(-1,180);
+	moveStraight(1,1.9,70);
+	liftX(-530); //Score in 10pt
+	moveStraight(-1,1.4,70);
+	rotate(1,72);
+	wait1Msec(10);
+	moveStraight(1,1,70);
+	liftX(530); //Pick up 2nd goal
+	rotate(-1,95);
+	moveStraight(1,3,127);
+	liftX(-530); //Score in 20pt
+	moveStraight(-1,0.9,100);
 }
