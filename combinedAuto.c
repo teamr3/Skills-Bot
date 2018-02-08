@@ -112,53 +112,39 @@ void liftX(int ticks){
 
 task main()
 {
+	initializeGyro();
 	//while(1){
 	//	rotate(1,90);
 	//}
-	initializeGyro();
 	liftX(-530);
 	moveStraight(1,1.5,127);
 	liftX(530);
 	rotate(-1,165);
 	moveStraight(1,2.3,127);
-	liftX(-530);// score 20pt
-	moveStraight(-1,1,127);
+ 	liftX(-530);// score 20pt
+	moveStraight(-1,0.8,100);
 	liftX(530);
 	rotate(-1,90);
-	moveStraight(1,1.2,127);
-	rotate(-1,395);
+	moveStraight(1,1.5,100);
+	rotate(-1,35);
 	liftX(-530);
-	moveStraight(1,1.3,127);
+	moveStraight(1,1.3,100);
 	liftX(530);
-	moveStraight(-1,1,127);
-	rotate(-1,170);
-	moveStraight(1,2,127);
-	rotate(-1,70);
+	moveStraight(-1,2,100);
+	rotate(-1,135);
+	moveStraight(1,1.95,100);
+	rotate(-1,90);
+	moveStraight(1,0.5,100);
 	liftX(-530);//score 10pt
-	moveStraight(-1,0.3,127);
-	rotate(1,115);
-	moveStraight(1,1.5,127);
+	moveStraight(-1,0.5,100);//Score (9,1)
 	liftX(530);
-	rotate(1,15);
-	moveStraight(-1,1.5,127);
-	rotate(-1,45);
-
-/*
-	initializeGyro();
+	rotate(-1,90);
+	moveStraight(1,1.5,100);
+	rotate(1,35);
 	liftX(-530);
-	moveStraight(1,2,127);
-	liftX(530); //Pick up 1st goal
-	moveStraight(-1,1,127);
-	rotate(-1,185);
-	moveStraight(1,1,127);
-	liftX(-530); //Score in 10pt
-	moveStraight(-1,0.8,127);
-	rotate(1,85);
-	moveStraight(1,1,127);
-	liftX(550); //Pick up 2nd goal
-	rotate(-1,110);
-	moveStraight(1 ,2.6,127);
-	liftX(-530); //Score in 20pt
-	moveStraight(-1,1,70);
-	rotate(1,90); */
+	moveStraight(1,1.3,100);
+	liftX(530);
+	moveStraight(-1,2,100);
+	rotate(-1,90);
+	liftX(-530);//score 10pt
 }
