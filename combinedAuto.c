@@ -135,6 +135,13 @@ task main()
 	moveStraight(1,2,127);
 	rotate(-1,70);
 	liftX(-530);//score 10pt
+	moveStraight(-1,0.3,127);
+	rotate(1,115);
+	moveStraight(1,1.5,127);
+	liftX(530);
+	rotate(1,15);
+	moveStraight(-1,1.5,127);
+	rotate(-1,45);
 
 /*
 	initializeGyro();
