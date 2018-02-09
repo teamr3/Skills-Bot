@@ -121,7 +121,7 @@ task main()
 	liftX(530);
 	rotate(-1,165);
 	moveStraight(1,2.3,127);
- 	liftX(-530);// score 20pt
+  	liftX(-530);// score 20pt
 	moveStraight(-1,0.8,100);
 	liftX(530);
 	rotate(-1,90);
@@ -135,16 +135,19 @@ task main()
 	moveStraight(1,1.95,100);
 	rotate(-1,90);
 	moveStraight(1,0.5,100);
-	liftX(-530);//score 10pt
+	liftX(-530);//score 10pt*/
+	liftX(530);
 	moveStraight(-1,0.5,100);//Score (9,1)
-	liftX(530);
-	rotate(-1,90);
-	moveStraight(1,1.5,100);
-	rotate(1,35);
+	wait1Msec(50);
+	rotate(1,90);
+	moveStraight(1,1,100);
+	wait1Msec(50);
+	rotate(1,28);
 	liftX(-530);
-	moveStraight(1,1.3,100);
+	moveStraight(1,0.85,100);
 	liftX(530);
-	moveStraight(-1,2,100);
-	rotate(-1,90);
+	moveStraight(-1,2.6,100);
+	rotate(-1,93);
+	moveStraight(-1,0.25,100);
 	liftX(-530);//score 10pt
 }
