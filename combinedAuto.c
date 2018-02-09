@@ -92,6 +92,9 @@ void moveStraight(int i,float d,int s){
 	}
 }
 
+
+
+
 void liftX(int ticks){
 	clearTimer(T1);
 	nMotorEncoder[lift]=0;
@@ -113,11 +116,7 @@ void liftX(int ticks){
 task main()
 {
 	initializeGyro();
-	//while(1){
-	//	wait1Msec(100);
-	//	rotate(-1,90);
-	//}
-	/*	liftX(-530);
+	liftX(-530);
 	moveStraight(1,1.5,127);
 	liftX(530);
 	rotate(-1,165);
@@ -135,8 +134,12 @@ task main()
 	rotate(-1,135);
 	moveStraight(1,1.95,100);
 	rotate(-1,90);
-	*/	moveStraight(1,0.6,127);
-	liftX(-530);//score 10pt *
+
+
+	//GOAL THREE
+	moveStraight(1,0.6,127);
+	liftX(-530);//score 10pt
+
 	wait1Msec(50);
 	liftX(150);
 	moveStraight(-1,0.6,115);//Score (9,1)
@@ -150,8 +153,7 @@ task main()
 
 
 	liftX(530);
-	liftX(530);
-	// liftX(530);
+
 	wait1Msec(10);
 	moveStraight(-1,1.5,127);
 	wait1Msec(100);
@@ -159,7 +161,23 @@ task main()
 	moveStraight(1,2.6,127);
 
 	liftX(-530);//score 10pt
+	//GOAL FOUR (3,4) trying to put it into the opposite corner 20 point zone
 
+	moveStraight(-1, 0.3, 127);
+	liftX(230);
+	moveStraight(-1, 0.7, 127);
+	liftX(-230);
+	rotate(-1, 90);
+	moveStraight(1, 0.2, 127);
+	rotate(-1, 90);
+	moveStraight(1, 1, 127); // SET TO FOUR (placeholder idk what the val is), no space on mat, should charge on the 4th goal and hopefully snag it into the next zone
 
-
+	liftX(530);
+	moveStraight(1, 1, 127);
+	rotate(-1, 16);
+	wait1Msec(25);
+	moveStraight(1,0.9,100);
+	rotate(1,28);
+	moveStraight(1, 1, 117);
+	liftX(-530);
 }
