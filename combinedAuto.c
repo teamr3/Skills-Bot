@@ -86,7 +86,7 @@ void moveStraight(int i,float d,int s){
 	setMotorTarget(rightD,dist,s,false);
 
 	// Runs till target is reached
-	while((!getMotorTargetCompleted(leftD) || !getMotorTargetCompleted(rightD)) && time1[T1]<2500)
+	while((!getMotorTargetCompleted(leftD) || !getMotorTargetCompleted(rightD)) && time1[T1]<2000)
 	{
 		sleep(10);
 	}
@@ -101,7 +101,7 @@ void liftX(int ticks){
 		{
 			motor[lift] = 127;
 		}
-	}else{
+		}else{
 		while(nMotorEncoder[lift]<ticks && time1[T1] < 2000)
 		{
 			motor[lift]=-127;
@@ -114,14 +114,15 @@ task main()
 {
 	initializeGyro();
 	//while(1){
-	//	rotate(1,90);
+	//	wait1Msec(100);
+	//	rotate(-1,90);
 	//}
-	liftX(-530);
+	/*	liftX(-530);
 	moveStraight(1,1.5,127);
 	liftX(530);
 	rotate(-1,165);
 	moveStraight(1,2.3,127);
-  	liftX(-530);// score 20pt
+	liftX(-530);// score 20pt
 	moveStraight(-1,0.8,100);
 	liftX(530);
 	rotate(-1,90);
@@ -134,20 +135,31 @@ task main()
 	rotate(-1,135);
 	moveStraight(1,1.95,100);
 	rotate(-1,90);
-	moveStraight(1,0.5,100);
-	liftX(-530);//score 10pt*/
-	liftX(530);
-	moveStraight(-1,0.5,100);//Score (9,1)
+	*/	moveStraight(1,0.6,127);
+	liftX(-530);//score 10pt *
 	wait1Msec(50);
-	rotate(1,90);
-	moveStraight(1,1,100);
-	wait1Msec(50);
-	rotate(1,28);
+	liftX(150);
+	moveStraight(-1,0.6,115);//Score (9,1)
+	wait1Msec(60);
+	rotate(1,105);
+	liftX(-75);
+	moveStraight(1,2.1,127);
+	wait1Msec(30);
 	liftX(-530);
-	moveStraight(1,0.85,100);
+	wait1Msec(3);
+
+
 	liftX(530);
-	moveStraight(-1,2.6,100);
-	rotate(-1,93);
-	moveStraight(-1,0.25,100);
+	liftX(530);
+	// liftX(530);
+	wait1Msec(10);
+	moveStraight(-1,1.5,127);
+	wait1Msec(100);
+	rotate(-1,155);
+	moveStraight(1,2.6,127);
+
 	liftX(-530);//score 10pt
+
+
+
 }
