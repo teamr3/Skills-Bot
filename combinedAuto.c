@@ -171,13 +171,10 @@ task main()
 	moveStraight(1, 0.2, 127);
 	rotate(-1, 90);
 	moveStraight(1, 1, 127); // SET TO FOUR (placeholder idk what the val is), no space on mat, should charge on the 4th goal and hopefully snag it into the next zone
-
 	liftX(530);
-	moveStraight(1, 1, 127);
-	rotate(-1, 16);
-	wait1Msec(25);
-	moveStraight(1,0.9,100);
-	rotate(1,28);
-	moveStraight(1, 1, 117);
+	moveStraight(1, 1,120);
+		rotate(-1, 19.5);
+		moveStraight(1,2.2,100);
 	liftX(-530);
+
 }
