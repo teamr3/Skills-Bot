@@ -1,4 +1,5 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
+#pragma config(Sensor, in1,    gyro,           sensorGyro)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
@@ -27,6 +28,7 @@ const float TICKS_PER_INCH = 28.86; //TEST
 const float TICKS_PER_DEGREE = 1.57; //Rotated 10.33 times, so average/(10.33*360)
 const float INCHES_PER_TILE = 24.25; //TEST
 const float TICKS_PER_TILE = TICKS_PER_INCH*INCHES_PER_TILE;
+const float GYRO_SCALING_FACTOR = 1; //TEST
 const int PID_DRIVE_MAX = 80;
 const int PID_DRIVE_MIN = 20; //TEST
 const int PID_ROTATE_MAX = 50;
@@ -38,12 +40,16 @@ const int MIN_POWER_TO_MOVE = 25;
 const float kp_wheels = -0.1489; //TEST for independant speed control. decrease if drifting to the left
 const float kp_drive = 0.0159; //TEST for distance control.
 
-//rotate
+//rotateEncoders
 const float kp_rotate = 0.024; //TEST for rotational control.
 const float kp_rotateWheels = 0.063;
 
+//rotateGyro
+const float kp_rotateGyro = 0.03;
+
 const int threshold = 10; //Error threshold
 const int driveThreshold = 20;//4
+const int gyroThreshold = 20; //+- degree threshold*10;
 
 
 
@@ -92,8 +98,10 @@ void pre_auton()
 	slaveMotor(rightDrive,rightEDrive);
 	nMotorEncoder[leftEDrive]=0;
 	nMotorEncoder[rightEDrive]=0;
+	SensorType[gyro]=sensorNone;
 	wait1Msec(1000);
-
+	SensorType[gyro]=sensorGyro;
+	wait1Msec(2000);
 }
 
 void initialize(){
@@ -165,18 +173,13 @@ void moveStraight(int i, float d){
 i: DIRECTION. 1 is ccw, -1 is cw.
 d: DEGREES. Self explanitory
 */
-void rotate(int i, float d){
+void rotateEncoders(int i, float d){
 
 	//Variables
 	float leftPower, rightPower;
 	float targetTicks, rotateErrorL, rotateErrorR, wheelDiff;
 
-
-	//Clear encoder values
-	nMotorEncoder[leftEDrive]=0;
-	nMotorEncoder[rightEDrive]=0;
-	wait1Msec(200);
-
+	initialize();
 	clearTimer(T1);
 
 	//targetTicks=TICKS_PER_DEGREE*d;
@@ -217,6 +220,54 @@ void rotate(int i, float d){
 	motor[rightEDrive]=0;
 }
 
+/* PARAMETERS
+-------------------
+i: DIRECTION. 1 is ccw, -1 is cw.
+d: DEGREES. Self explanitory
+*/
+void rotateGyro(int i, float d){
+
+	//Clear Gyro
+	SensorValue[gyro]=0;
+
+	//Variables
+	float leftPower, rightPower;
+	float targetTicks = d*10*GYRO_SCALING_FACTOR;
+	float gyroError = targetTicks-abs(SensorValue[gyro]);
+
+	clearTimer(T1);
+
+	//ACTUAL P LOOP
+	//Breaks after 4 seconds or if both left and right side of drive reached the target
+	while(time1[T1]<4000 && abs(gyroError)>gyroThreshold){
+		gyroError=targetTicks-abs(SensorValue[gyro]);
+
+		//Proportional power gain
+		leftPower=i*(PID_ROTATE_MIN+(kp_rotateGyro*gyroError);
+		rightPower=(-i)*(PID_ROTATE_MIN+(kp_rotateGyro*gyroError);
+
+		//Keeps the left power values within the max-min range
+		if(leftPower>PID_ROTATE_MAX){
+			leftPower=PID_ROTATE_MAX;
+			} else {
+			//leftPower=leftPower-(wheelDiff*kp_rotateWheels);
+		}
+
+		//Keeps the right power values within the max-min range
+		if(rightPower>PID_ROTATE_MAX){
+			rightPower=PID_ROTATE_MAX
+			} else {
+			//rightPower=rightPower+(wheelDiff*kp_rotateWheels);
+		}
+
+		motor[leftEDrive]=leftPower;
+		motor[rightEDrive]=rightPower;
+		wait1Msec(25); //Run at 50Hz
+	}
+	motor[leftEDrive]=0;
+	motor[rightEDrive]=0;
+}
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              Autonomous Task                              */
@@ -230,7 +281,7 @@ void rotate(int i, float d){
 task autonomous()
 {
 	//moveStraight(1,3);
-	rotate(1,360);
+	rotateGyro(1,360);
 }
 
 /*---------------------------------------------------------------------------*/
