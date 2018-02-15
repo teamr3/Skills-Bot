@@ -30,13 +30,23 @@ const float TICKS_PER_TILE = TICKS_PER_INCH*INCHES_PER_TILE;
 const int PID_DRIVE_MAX = 80;
 const int PID_DRIVE_MIN = 20; //TEST
 const int PID_ROTATE_MAX = 50;
-const int PID_ROTATE_MIN = 25; //TEST
+const int PID_ROTATE_MIN = 30; //TEST
 const int MIN_POWER_TO_MOVE = 25;
 
+//Function specific constants
+//MoveStraight
 const float kp_wheels = -0.1489; //TEST for independant speed control. decrease if drifting to the left
 const float kp_drive = 0.0159; //TEST for distance control.
-const float kp_rotate = 0.05; //TEST for rotational control.
+
+//rotate
+const float kp_rotate = 0.024; //TEST for rotational control.
+const float kp_rotateWheels = 0.063;
+
 const int threshold = 10; //Error threshold
+const int driveThreshold = 20;//4
+
+
+
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -118,8 +128,6 @@ void moveStraight(int i, float d){
 	//ACTUAL P LOOP
 	//Breaks after 4 seconds or if both left and right side of drive reached the target
 	while(time1[T1]<4000 && (abs(distErrorL)>threshold || abs(distErrorR)>threshold)){
-		//targetTicks=d*TICKS_PER_TILE;
-		targetTicks=1500;
 		distErrorL = targetTicks-abs(nMotorEncoder[leftEDrive]);
 		distErrorR = targetTicks-abs(nMotorEncoder[rightEDrive]);
 		wheelDiff = abs(nMotorEncoder[leftEDrive])-abs(nMotorEncoder[rightEDrive]);
@@ -171,36 +179,42 @@ void rotate(int i, float d){
 
 	clearTimer(T1);
 
-	targetTicks=TICKS_PER_DEGREE*d;
+	//targetTicks=TICKS_PER_DEGREE*d;
+	targetTicks=1000;
 	rotateErrorL = targetTicks-abs(nMotorEncoder[leftEDrive]);
 	rotateErrorR = targetTicks-abs(nMotorEncoder[rightEDrive]);
 
 	//ACTUAL P LOOP
 	//Breaks after 4 seconds or if both left and right side of drive reached the target
 	while(time1[T1]<4000 && (abs(rotateErrorL)>threshold || abs(rotateErrorR)>threshold)){
-		targetTicks=TICKS_PER_DEGREE*d;
 		rotateErrorL = targetTicks-abs(nMotorEncoder[leftEDrive]);
 		rotateErrorR = targetTicks-abs(nMotorEncoder[rightEDrive]);
 		wheelDiff = abs(nMotorEncoder[leftEDrive])-abs(nMotorEncoder[rightEDrive]);
 
-		//Proportional power gain
-		leftPower=i*(PID_ROTATE_MIN+(kp_rotate*rotateErrorL));
-		rightPower=(-i)*(PID_ROTATE_MIN+(kp_rotate*rotateErrorR));//TEST figure out +- values for i corresponding to motors
+		//Proportional power gain, Minh added: "-(wheelDiff*kp_rotateWheels)" and "+(wheelDiff*kp_rotateWheels)" to leftPower and rightPower
+		leftPower=i*(PID_ROTATE_MIN+(kp_rotate*rotateErrorL)-(wheelDiff*kp_rotateWheels));
+		rightPower=(-i)*(PID_ROTATE_MIN+(kp_rotate*rotateErrorR)+(wheelDiff*kp_rotateWheels));//TEST figure out +- values for i corresponding to motors
 
 		//Keeps the left power values within the max-min range
-		if(abs(leftPower)>PID_ROTATE_MAX){
-			leftPower=i*(PID_ROTATE_MAX-(wheelDiff*kp_wheels));//TEST for i
+		if(leftPower>PID_ROTATE_MAX){
+			leftPower=PID_ROTATE_MAX-(wheelDiff*kp_rotateWheels);
+			} else {
+			leftPower=leftPower-(wheelDiff*kp_rotateWheels);
 		}
 
 		//Keeps the right power values within the max-min range
-		if(abs(rightPower)>PID_ROTATE_MAX){
-			rightPower=(-i)*(PID_ROTATE_MAX+(wheelDiff*kp_wheels));//TEST for i
+		if(rightPower>PID_ROTATE_MAX){
+			rightPower=PID_ROTATE_MAX+(wheelDiff*kp_rotateWheels);
+			} else {
+			rightPower=rightPower+(wheelDiff*kp_rotateWheels);
 		}
 
 		motor[leftEDrive]=leftPower;
 		motor[rightEDrive]=rightPower;
 		wait1Msec(25); //Run at 50Hz
 	}
+	motor[leftEDrive]=0;
+	motor[rightEDrive]=0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -215,7 +229,8 @@ void rotate(int i, float d){
 
 task autonomous()
 {
-	moveStraight(1,3);
+	//moveStraight(1,3);
+	rotate(1,360);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -230,22 +245,25 @@ task autonomous()
 
 task usercontrol()
 {
+	initialize();
 	while(1){
-		if(abs(vexRT[Ch3])>threshold){
+		if(abs(vexRT[Ch3])>driveThreshold){
 			motor[leftEDrive]=vexRT[Ch3];
 			}	else {
 			motor[leftEDrive]=0;
 		}
-		if(abs(vexRT[Ch2])>threshold){
+		if(abs(vexRT[Ch2])>driveThreshold){
 			motor[rightEDrive]=vexRT[Ch2];
 			}	else {
 			motor[rightEDrive]=0;
 		}
 		if(vexRT[Btn6U]==1){
-			motor[lift]=127;
-			}	else if(vexRT[Btn6D]==1){
-			motor[lift]=-127;
-			}	else {
+				motor[lift]=127;
+		}
+		else if(vexRT[Btn6D]==1){
+				motor[lift]=-127;
+		}
+		else {
 			motor[lift]=0;
 		}
 	}
