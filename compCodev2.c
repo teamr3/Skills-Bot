@@ -25,10 +25,10 @@ Port 9: PE B Right Lift
 
 //Global Constants
 const float TICKS_PER_INCH = 28.86; //TEST
-const float TICKS_PER_DEGREE = 1.57; //Rotated 10.33 times, so average/(10.33*360)
+const float TICKS_PER_DEGREE = 1.5138; //Rotated 10.33 times, so average/(10.33*360)
 const float INCHES_PER_TILE = 24.25; //TEST
-const float TICKS_PER_TILE = TICKS_PER_INCH*INCHES_PER_TILE;
-const float GYRO_SCALING_FACTOR = 1; //TEST
+const float TICKS_PER_TILE = 455;
+const float GYRO_SCALING_FACTOR = 1.0645; //TEST
 const int PID_DRIVE_MAX = 80;
 const int PID_DRIVE_MIN = 20; //TEST
 const int PID_ROTATE_MAX = 50;
