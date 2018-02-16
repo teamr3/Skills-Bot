@@ -3,9 +3,9 @@
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
-#pragma config(Motor,  port2,           leftEDrive,    tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_2)
+#pragma config(Motor,  port2,           leftEDrive,    tmotorVex393HighSpeed_MC29, PIDControl, encoderPort, I2C_2)
 #pragma config(Motor,  port3,           leftDrive,     tmotorVex393HighSpeed_MC29, openLoop, reversed)
-#pragma config(Motor,  port6,           rightEDrive,   tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, I2C_3)
+#pragma config(Motor,  port6,           rightEDrive,   tmotorVex393HighSpeed_MC29, PIDControl, reversed, encoderPort, I2C_3)
 #pragma config(Motor,  port7,           rightDrive,    tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port8,           lift,          tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port9,           slaveLift,     tmotorVex393HighSpeed_MC29, openLoop, reversed)
@@ -268,6 +268,17 @@ void rotateGyro(int i, float d){
 	motor[rightEDrive]=0;
 }
 
+void internalPID(int i, float d, int s){
+	//float targetTicks=i*d*TICKS_PER_TILE;
+	float targetTicks=1000;
+	initialize();
+
+	setMotorTarget(leftEDrive, targetTicks, s, false);
+	setMotorTarget(rightEDrive, targetTicks, s, false);
+	waitUntilMotorStop(leftEDrive);
+	waitUntilMotorStop(rightEDrive);
+}
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              Autonomous Task                              */
@@ -281,7 +292,8 @@ void rotateGyro(int i, float d){
 task autonomous()
 {
 	//moveStraight(1,3);
-	rotateGyro(1,360);
+	//rotateGyro(1,360);
+	internalPID(1,2,50);
 }
 
 /*---------------------------------------------------------------------------*/
